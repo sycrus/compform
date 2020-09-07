@@ -10,35 +10,47 @@ int newI, newJ; //new row and col coords
 
 int numCols = 5;
 int numRows = 6;
+int saveCount = 0;
+
 boolean isNeighborFound = false;
 boolean isDone = false;
 
 void setup() {
-  size(600, 600);
+  size(400, 450);
   background(255);
   setupKeyArray();
   fill(0);
   //printCircles();
 
-  //int randX = int(random(1, numCols-1));
-  //int randY = int(random(1, numRows-1));
-  int randX = 2; 
-  int randY = 4; //#
+  int randX = int(random(1, numCols-1));
+  int randY = int(random(1, numRows-1));
+  //int randX = 2; 
+  //int randY = 4; //#
   currI = randX; 
   currJ = randY;
-
-
   loop();
 }
 
 void draw() {
   fill(0);
 
+  if (hasNeighbors(currI, currJ) == false) {
+      saveFrame("save-#####.jpg");
+      println("saved");
+  }
+  
   pickNeighbor(currI, currJ);
   drawConnection(currI, currJ, newI, newJ);
   nodeCount++;
   currI = newI; 
   currJ = newJ;
+}
+void keyPressed() { 
+  if (key=='x') { 
+    saveFrame("save-###.jpg");
+    println("saved");
+    
+  }
 }
 
 void drawConnection(int oi, int oj, int ni, int nj) {
@@ -55,12 +67,13 @@ boolean hasNeighbors (int i, int j) {
   boolean isValid = false;
   for (int x = -1; x < 2; x++) {
     for (int y = -1; y < 2; y++) {
-      if (circArray[i + x][j + y]._n < 2) {
-        isValid= true;
+      if (circArray[i + x][j + y]._n < 1) {
+        isValid = true;
       }
     }
   }
   if (isValid) { 
+    println("isValid TRUE");
     return true;
   } else { 
     return false;
@@ -126,10 +139,4 @@ void printCircles() {
       }
     }
   }
-}
-
-void checkValues() {
-  //print("Original:", randX, randY, " Key:", circArray[randX][randY]._key, 
-  //        " Mod: ", modI, modJ, 
-  //        " Neighbor: ", newI, newJ, "Key: ", circArray[newI][newJ]._key, "\n");
 }
